@@ -17,4 +17,6 @@ fn main() {
     c02::primitives_and_operations();
     separator();
     c02::tuples();
+    separator();
+    c02::arrays_and_slices();
 }
