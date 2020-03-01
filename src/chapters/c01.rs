@@ -73,7 +73,10 @@ pub fn display() {
     }
   }
 
-  println!("Now the structure `{}` is printed with display", Structure(7));
+  println!(
+    "Now the structure `{}` is printed with display",
+    Structure(7)
+  );
 
   // ACTIVITIES
 
@@ -89,4 +92,190 @@ pub fn display() {
   }
 
   println!("Structure debugged: {:?}", Structure(6));
+}
+
+pub fn testcase_list() {
+  use std::fmt; // Import the `fmt` module.
+
+  // Define a structure named `List` containing a `Vec`.
+  struct List(Vec<i32>);
+
+  impl fmt::Display for List {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+      // Extract the value using tuple indexing,
+      // and create a reference to `vec`.
+      let vec = &self.0;
+
+      write!(f, "[")?;
+      // try!(write!(f, "["));
+
+      // Iterate over `v` in `vec` while enumerating the iteration
+      // count in `count`.
+      for (count, v) in vec.iter().enumerate() {
+        // For every element except the first, add a comma.
+        // Use the ? operator, or try!, to return on errors.
+        if count != 0 {
+          write!(f, ", ")?;
+        }
+        write!(f, "{}", v)?;
+      }
+
+      // Close the opened bracket and return a fmt::Result value.
+      write!(f, "]")
+    }
+  }
+
+  let mut v = List(vec![1, 2, 3]);
+  println!("len {}", v.0.len());
+  v.0.push(4);
+  println!("{}", v);
+
+  // ACTIVITIES
+  impl fmt::Debug for List {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+      // Extract the value using tuple indexing,
+      // and create a reference to `vec`.
+      let vec = &self.0;
+
+      write!(f, "[")?;
+      // try!(write!(f, "["));
+
+      // Iterate over `v` in `vec` while enumerating the iteration
+      // count in `count`.
+      for (count, v) in vec.iter().enumerate() {
+        // For every element except the first, add a comma.
+        // Use the ? operator, or try!, to return on errors.
+        if count != 0 {
+          write!(f, ", ")?;
+        }
+        write!(f, "{}: '{}'", count, v)?;
+      }
+
+      // Close the opened bracket and return a fmt::Result value.
+      write!(f, "]")
+    }
+  }
+
+  let v2 = List(vec![9, 8, 33]);
+
+  println!("{:?}", v2);
+}
+
+pub fn formatting() {
+  /*
+   * This formatting functionality is implemented via traits, and there is one trait
+   * for each argument type. The most common formatting trait is Display, which
+   * handles cases where the argument type is left unspecified: {} for instance.
+   */
+
+  use std::fmt::{self, Display, Formatter};
+
+  struct City {
+    name: &'static str,
+    // Latitude
+    lat: f32,
+    // Longitude
+    lon: f32,
+  }
+
+  impl Display for City {
+    // `f` is a buffer, and this method must write the formatted string into it
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+      let lat_c = if self.lat >= 0.0 { 'N' } else { 'S' };
+      let lon_c = if self.lon >= 0.0 { 'E' } else { 'W' };
+
+      // `write!` is like `format!`, but it will write the formatted string
+      // into a buffer (the first argument)
+      write!(
+        f,
+        "{}: {:.3}°{} {:.3}°{}",
+        self.name,
+        self.lat.abs(),
+        lat_c,
+        self.lon.abs(),
+        lon_c
+      )
+    }
+  }
+
+  #[derive(Debug)]
+  struct Color {
+    red: u8,
+    green: u8,
+    blue: u8,
+  }
+
+  for city in [
+    City {
+      name: "Dublin",
+      lat: 53.347778,
+      lon: -6.259722,
+    },
+    City {
+      name: "Oslo",
+      lat: 59.95,
+      lon: 10.75,
+    },
+    City {
+      name: "Vancouver",
+      lat: 49.25,
+      lon: -123.1,
+    },
+  ]
+  .iter()
+  {
+    println!("{}", *city);
+  }
+
+  let colors = [
+    Color {
+      red: 128,
+      green: 255,
+      blue: 90,
+    },
+    Color {
+      red: 0,
+      green: 3,
+      blue: 254,
+    },
+    Color {
+      red: 0,
+      green: 0,
+      blue: 0,
+    },
+  ];
+
+  for color in colors.iter() {
+    println!("{:?}", *color);
+  }
+
+  impl Display for Color {
+    // `f` is a buffer, and this method must write the formatted string into it
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+      // let lat_c = if self.lat >= 0.0 { 'N' } else { 'S' };
+
+      let exa = format!("{:02X}{:02X}{:02X}", self.red, self.green, self.blue);
+
+      // `write!` is like `format!`, but it will write the formatted string
+      // into a buffer (the first argument)
+      write!(
+        f,
+        "RGB ({}, {}, {}) 0x{}",
+        self.red, self.green, self.blue, exa
+      )
+
+      // Alternative
+
+      // write!(
+      //   f,
+      //   "RGB ({red}, {green}, {blue}) 0x{red:02X}{green:02X}{blue:02X}",
+      //   red = self.red,
+      //   green = self.green, blue=self.blue
+      // )
+    }
+  }
+
+  for color in colors.iter() {
+    println!("{}", *color);
+  }
 }
