@@ -1,8 +1,8 @@
 mod chapters;
 
-use chapters::{c01::chapter_main as chapter_01, c02::chapter_main as chapter_02};
+use chapters::{c01, c02::chapter_main as chapter_02};
 
 fn main() {
-    chapter_01();
+    c01::format_string();
     chapter_02();
 }
