@@ -36,14 +36,57 @@ pub fn format_string() {
 
   // ACTIVITIES
 
-  // 01 Fix the examples
+  // A01 Fix the examples
   println!("My name is {0}, {1} {0}", "Bond", "James");
 
+  // Derive the `fmt::Debug` implementation for `Structure`. `Structure`
+  // is a structure which contains a single `i32`.
   #[derive(Debug)]
   struct Structure(i32);
+  // The problem with `derive` is there is no control over how
+  // the results look. What if I want this to just show a `3`?
   println!("This struct `{:?}` ~won't~ WILL print...", Structure(3));
 
   // A02: Add a println! macro that prints: Pi is roughly 3.142 by controlling the number of decimal places shown.
-  let Pi: f32 = 3.141562654;
-  println!("Pi number is {0:.3}", Pi)
+  let pi: f32 = 3.141562654;
+  println!("Pi number is {0:.3}", pi)
+}
+
+pub fn display() {
+  // Import (via `use`) the `fmt` module to make it available.
+  use std::fmt;
+
+  // Define a structure for which `fmt::Display` will be implemented. This is
+  // a tuple struct named `Structure` that contains an `i32`.
+  struct Structure(i32);
+
+  // To use the `{}` marker, the trait `fmt::Display` must be implemented
+  // manually for the type.
+  impl fmt::Display for Structure {
+    // This trait requires `fmt` with this exact signature.
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+      // Write strictly the first element into the supplied output
+      // stream: `f`. Returns `fmt::Result` which indicates whether the
+      // operation succeeded or failed. Note that `write!` uses syntax which
+      // is very similar to `println!`.
+      write!(f, "{}", self.0)
+    }
+  }
+
+  println!("Now the structure `{}` is printed with display", Structure(7));
+
+  // ACTIVITIES
+
+  impl fmt::Debug for Structure {
+    // This trait requires `fmt` with this exact signature.
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+      // Write strictly the first element into the supplied output
+      // stream: `f`. Returns `fmt::Result` which indicates whether the
+      // operation succeeded or failed. Note that `write!` uses syntax which
+      // is very similar to `println!`.
+      write!(f, "Structure value: {}", self.0)
+    }
+  }
+
+  println!("Structure debugged: {:?}", Structure(6));
 }
