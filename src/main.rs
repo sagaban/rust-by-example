@@ -1,6 +1,6 @@
 mod chapters;
 
-use chapters::{c01, c02};
+use chapters::{c01, c02, c03};
 
 fn separator() {
     println!("\n \n ---------------------------------------- \n \n")
@@ -19,4 +19,6 @@ fn main() {
     c02::tuples();
     separator();
     c02::arrays_and_slices();
+    separator();
+    c03::structures();
 }
