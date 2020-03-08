@@ -21,4 +21,16 @@ fn main() {
     c02::arrays_and_slices();
     separator();
     c03::structures();
+    separator();
+    c03::enums();
+    separator();
+    c03::alias();
+    separator();
+    c03::_use();
+    separator();
+    c03::c_liKe_enums();
+    separator();
+    c03::testcase_linked_list();
+    separator();
+    c03::constants();
 }
